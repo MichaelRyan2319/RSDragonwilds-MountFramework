@@ -10,8 +10,8 @@ return {
 
     creature = {
         mesh = "/Game/Art/Skeleton/NPC/Creatures/Wolf_01/SK_Wolf_01",
-        scale = 1.9,
-        offset = { X = 0, Y = 0, Z = -179 },
+        scale = 2.2,
+        offset = { X = -50, Y = 0, Z = 0 },   -- moved back so you sit mid-back
         rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
         idle = "/Game/Art/Animation/NPC_Wolf/Idle/A_NPC_Wolf_Idle_Breathe",
         walk = "/Game/Art/Animation/NPC_Wolf/Walk/A_NPC_Wolf_Walk_Fwd",

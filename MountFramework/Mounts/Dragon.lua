@@ -10,8 +10,8 @@ return {
 
     creature = {
         mesh = "/Game/Art/Skeleton/NPC/Reptilian/Dragon_Lesser_Green_01/SK_Dragon_Lesser_Green_01",
-        scale = 0.3,
-        offset = { X = 0, Y = 0, Z = -179 },
+        scale = 0.6,
+        offset = { X = 0, Y = 0, Z = 0 },
         rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
         idle = "/FutureMajorVersion/Art/Animation/Animations/NPC_LesserDragon/Idle/A_NPC_LesserDragon_Idle",
         walk = "/FutureMajorVersion/Art/Animation/Animations/NPC_LesserDragon/Walk/A_NPC_LesserDragon_Walk",

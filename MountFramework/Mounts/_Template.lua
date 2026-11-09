@@ -25,9 +25,11 @@ return {
     -- model is shown under you. Tune scale/offset until it sits right.
     -- creature = {
     --     mesh = "/Game/Art/Skeleton/NPC/Creatures/Wolf_01/SK_Wolf_01",
-    --     scale = 1.9,
-    --     offset = { X = 0, Y = 0, Z = -179 },   -- -179 puts its feet on the ground
-    --     rotation = { Pitch = 0, Yaw = 0, Roll = 0 },
+    --     scale = 2.2,
+    --     offset = { X = -50, Y = 0, Z = 0 },    -- X forward, Y right, Z up; 0,0,0 = on the
+    --                                           -- ground right under you. -50 moves it back
+    --                                           -- so you sit further forward on it.
+    --     rotation = { Pitch = 0, Yaw = 0, Roll = 0 },  -- game creature models face forward at 0
     --     idle = "/Game/Art/Animation/NPC_Wolf/Idle/A_NPC_Wolf_Idle_Breathe",
     --     walk = "/Game/Art/Animation/NPC_Wolf/Walk/A_NPC_Wolf_Walk_Fwd",
     --     run = "/Game/Art/Animation/NPC_Wolf/Run/A_NPC_Wolf_Run_Fwd",

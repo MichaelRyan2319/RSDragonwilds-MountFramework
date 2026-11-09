@@ -58,14 +58,12 @@ local MOVE_WALKING, MOVE_FALLING, MOVE_FLYING = 1, 3, 5
 ------------------------------------------------------------------------ toast
 
 local toast = nil
-local counter = 0
 local function Toast(message, seconds)
     U.Log("%s", message)
     pcall(function()
         if toast and U.Valid(toast.widget) then toast.widget:RemoveFromParent() end
         local function New(cls, outer, name)
-            counter = counter + 1
-            return StaticConstructObject(StaticFindObject(cls), outer, FName(name .. "_" .. counter))
+            return StaticConstructObject(StaticFindObject(cls), outer, FName(U.UniqueName(name)))
         end
         local w = New("/Script/UMG.UserWidget", UEHelpers.GetGameInstance(), "MF_Toast")
         w.WidgetTree = New("/Script/UMG.WidgetTree", w, "WidgetTree")
@@ -248,6 +246,7 @@ end
 ------------------------------------------------------------------------ mounts tab
 
 local Tab = {}   -- screen address -> { entries }
+local LOCK_EQUIPPABLE = 2   -- EMountLockState::UnlockedAndEquippable
 
 local function IsTemplate(obj)
     local name = U.FullName(obj)
@@ -271,6 +270,12 @@ local function RefreshEntries(screen, entries)
         local isEq = def ~= nil and def.id == World.selected
         if U.Get(e, "bIsEquipped") ~= isEq then
             U.Set(e, "bIsEquipped", isEq)
+            changed = true
+        end
+        -- The game sets every entry's lock state from the mounts you've unlocked
+        -- whenever it refreshes the tab, which marks ours Locked. Undo that.
+        if U.Get(e, "LockState") ~= LOCK_EQUIPPABLE then
+            U.Set(e, "LockState", LOCK_EQUIPPABLE)
             changed = true
         end
     end
@@ -304,7 +309,7 @@ local function UpdateMountsTab()
             local e = U.NewObject("/Script/Dominion.MountSlotEntryData", screen, "MF_" .. def.id, false)
             if e then
                 U.Set(e, "MountData", data)
-                U.Set(e, "LockState", 2)   -- EMountLockState::UnlockedAndEquippable
+                U.Set(e, "LockState", LOCK_EQUIPPABLE)
                 U.Set(e, "bIsEquipped", World.selected == def.id)
                 U.Call(list, "AddItem", e)
                 entries[#entries + 1] = e
@@ -402,9 +407,11 @@ local function CreateCreature(pawn, mc, c)
         local m = U.Load(path)
         if m then U.Call(comp, "SetMaterial", i - 1, m) end
     end
-    U.Call(comp, "K2_SetRelativeLocationAndRotation", c.offset, c.rotation, false, {}, false)
+    -- The mount's own mesh is turned like every character mesh: its +Y is forward and
+    -- its -X is right. Offsets in mount files are forward/right/up, so convert them.
+    local o = c.offset
+    U.Call(comp, "K2_SetRelativeLocationAndRotation", { X = -(o.Y or 0), Y = o.X or 0, Z = o.Z or 0 }, c.rotation, false, {}, false)
     U.Call(comp, "SetRelativeScale3D", { X = c.scale, Y = c.scale, Z = c.scale })
-    U.Call(comp, "SetAnimationMode", 1)   -- EAnimationMode::AnimationSingleNode
     return comp
 end
 
