@@ -573,18 +573,7 @@ local SafeTick = function()
 end
 
 LoadMountFiles()
-
-local queued = false
-LoopAsync(TICK_MS, function()
-    if not queued then
-        queued = true
-        ExecuteInGameThread(function()
-            queued = false
-            SafeTick()
-        end)
-    end
-    return false
-end)
+U.GameThreadLoop(TICK_MS, SafeTick)
 
 RegisterKeyBind(Key.LEFT_MOUSE_BUTTON, function()
     ExecuteInGameThread(function()
