@@ -9,12 +9,13 @@ Spellbook's **Mounts** tab next to the game's own mounts. A custom mount can:
 - **fly**: hold Space to rise, Ctrl to descend and land, Shift to fly faster;
 - change **speed, jump height and gravity**.
 
-It comes with two mounts:
+The framework has no mounts of its own. Each mount is a separate mod that needs
+the framework:
 
-| Mount | What it is |
+| Mount mod | What it is |
 | --- | --- |
-| **Dire Wolf** | A wolf the size of a horse. 15% faster than the Terrorbird and jumps higher. |
-| **Young Dragon** | A small green dragon you can fly. |
+| [Dire Wolf](https://github.com/MichaelRyan2319/RSDragonwilds-DireWolfMount) | A wolf the size of a horse. 15% faster than the Terrorbird and jumps higher. |
+| [Young Dragon](https://github.com/MichaelRyan2319/RSDragonwilds-YoungDragonMount) | A small green dragon you can fly. |
 
 - You need a mount of your own (e.g. the Terrorbird) to summon. A custom mount
   changes how that mount looks and moves while you ride it.
@@ -22,8 +23,8 @@ It comes with two mounts:
 - Your saves stay valid with or without the mod (see "Saves" below).
 - Doesn't change any world settings, so achievements keep working.
 
-This is an early version: the Dire Wolf's riding position and animations are
-still being tuned, and flying hasn't been tested much yet.
+This is an early version: creature riding is still being tuned, and flying
+hasn't been tested much yet.
 
 Built for game build 26162923 (Unreal Engine 5.6) with UE4SS v3.0.1.
 
@@ -45,7 +46,10 @@ keeps it up to date.
    UE4SS, so Mod Loader 1.1.0 or later offers to add
    `MichaelRyan2319/RSDragonwilds-UE4SS` as well; click **Yes**. With an older
    Mod Loader, add `MichaelRyan2319/RSDragonwilds-UE4SS` yourself first.
-3. Start the game and load your world.
+3. Add the mount mods you want (e.g. `MichaelRyan2319/RSDragonwilds-DireWolfMount`).
+   Adding a mount mod first also works: Mod Loader 1.1.0 or later then offers to
+   add the framework and UE4SS.
+4. Start the game and load your world.
 
 ## Install by hand
 
@@ -55,7 +59,9 @@ keeps it up to date.
    then open the `RSDragonwilds` folder (the one with `Binaries` and `Content`
    in it) and extract the zip there. The mod ends up in
    `Binaries\Win64\ue4ss\Mods\MountFramework`.
-3. Start the game and load your world.
+3. Install the mount mods you want the same way. Their files go into
+   `MountFramework\Mounts`.
+4. Start the game and load your world.
 
 The mod folder contains `enabled.txt`, so UE4SS loads it without any change to
 `mods.txt`. To install from this repo instead of a release, copy the
@@ -77,16 +83,23 @@ descend (you land when you reach the ground), and **Shift** to fly faster.
 ## Making your own mounts
 
 Copy `Mounts\_Template.lua`, rename the copy (files starting with `_` are
-ignored), edit it and restart the game. The template explains every field.
-`DireWolf.lua` and `Dragon.lua` are complete examples.
+ignored), edit it and restart the game. The template explains every field. The
+[Dire Wolf](https://github.com/MichaelRyan2319/RSDragonwilds-DireWolfMount) and
+[Young Dragon](https://github.com/MichaelRyan2319/RSDragonwilds-YoungDragonMount)
+mods are complete examples.
 
 For a creature look, give the path of one of the game's creature models and its
 animations. Then adjust `scale` and `offset` until it sits right under you.
 Offsets are in centimetres: X is forward, Y is right, Z is up, and 0, 0, 0 is
 the ground right under you.
 
-If UE4SS can't list the folder, the mod only loads the files named in
-`Mounts\_list.txt`, so add new files there too.
+To share a mount as its own mod, copy the Dire Wolf mod's layout:
+- put the file at `MountFramework/Mounts/<Name>.lua` in the zip;
+- add a `modloader.json` that requires this framework, so Mod Loader offers it.
+
+If UE4SS can't list the folder, the log says so, and the framework loads only
+the files named in `Mounts\_list.txt` (one file name per line; create it
+yourself).
 
 ## Settings
 
@@ -110,7 +123,8 @@ equipped. The mod remembers your chosen custom mount in its own file,
 `saved_mount_<character>.txt`, in the mod folder, and changes how your mount
 looks and moves while you ride.
 
-If you remove the mod, you just ride your normal mount again.
+If you remove the framework or the mount mod you chose, you just ride your
+normal mount again.
 
 ## Achievements
 
